@@ -206,12 +206,12 @@ return assignments.filter(assignment =>
                         </div>
                         
                         <div className="space-y-1">
-                          {dayAssignments.slice(0, 2).map((assignment) => {
+{dayAssignments.slice(0, 2).map((assignment) => {
                             const course = getCourseById(assignment.courseId);
                             return (
                               <div
                                 key={assignment.Id}
-className="text-xs p-1 rounded truncate"
+                                className="text-xs p-1 rounded truncate"
                                 style={{ 
                                   backgroundColor: course?.color_c + "20",
                                   borderLeft: `3px solid ${course?.color_c}` 
@@ -221,6 +221,7 @@ className="text-xs p-1 rounded truncate"
                                 {assignment.title_c}
                               </div>
                             );
+                          })}
                           {dayAssignments.length > 2 && (
                             <div className="text-xs text-gray-500">
                               +{dayAssignments.length - 2} more
