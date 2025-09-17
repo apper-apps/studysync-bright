@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
-
+import { AuthContext } from "../../App";
 const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { logout } = useContext(AuthContext);
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: "LayoutDashboard" },
@@ -59,7 +60,15 @@ const Layout = () => {
             ))}
           </nav>
           
-          <div className="p-4 border-t border-gray-200">
+<div className="p-4 border-t border-gray-200">
+            <Button 
+              onClick={logout}
+              variant="ghost" 
+              className="w-full justify-start text-gray-600 hover:text-gray-900 mb-2"
+            >
+              <ApperIcon name="LogOut" size={16} className="mr-2" />
+              Logout
+            </Button>
             <div className="text-xs text-gray-500 text-center">
               Academic Year 2024-25
             </div>
@@ -96,10 +105,20 @@ const Layout = () => {
               </div>
             </div>
             
-            <nav className="px-4 pb-4 space-y-1">
+<nav className="px-4 pb-4 space-y-1">
               {navigation.map((item) => (
                 <NavItem key={item.name} item={item} mobile />
               ))}
+              <div className="pt-4 border-t border-gray-200">
+                <Button 
+                  onClick={logout}
+                  variant="ghost" 
+                  className="w-full justify-start text-gray-600 hover:text-gray-900"
+                >
+                  <ApperIcon name="LogOut" size={16} className="mr-2" />
+                  Logout
+                </Button>
+              </div>
             </nav>
           </div>
         </div>

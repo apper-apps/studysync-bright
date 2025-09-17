@@ -77,14 +77,14 @@ const Assignments = () => {
   };
 
   const getAssignmentStatus = (assignment) => {
-    if (assignment.status === "completed") return "completed";
-    if (isAfter(new Date(), new Date(assignment.dueDate))) return "overdue";
+if (assignment.status_c === "completed") return "completed";
+    if (isAfter(new Date(), new Date(assignment.due_date_c))) return "overdue";
     if (isToday(new Date(assignment.dueDate))) return "in-progress";
     return "pending";
   };
 
   const filteredAssignments = assignments.filter(assignment => {
-    const matchesSearch = assignment.title.toLowerCase().includes(searchTerm.toLowerCase());
+const matchesSearch = assignment.title_c.toLowerCase().includes(searchTerm.toLowerCase());
     
     const actualStatus = getAssignmentStatus(assignment);
     const matchesStatus = statusFilter === "all" || actualStatus === statusFilter;
@@ -98,7 +98,7 @@ const Assignments = () => {
 
   const getAssignmentStats = () => {
     const total = assignments.length;
-    const completed = assignments.filter(a => a.status === "completed").length;
+const completed = assignments.filter(a => a.status_c === "completed").length;
     const pending = assignments.filter(a => getAssignmentStatus(a) === "pending").length;
     const overdue = assignments.filter(a => getAssignmentStatus(a) === "overdue").length;
     
@@ -207,9 +207,9 @@ const Assignments = () => {
             className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">All Courses</option>
-            {courses.map(course => (
+{courses.map(course => (
               <option key={course.Id} value={course.Id}>
-                {course.code} - {course.name}
+                {course.code_c} - {course.name_c}
               </option>
             ))}
           </select>

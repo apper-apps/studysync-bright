@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Card from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import GradeProgress from "@/components/molecules/GradeProgress";
-import GradeChart from "@/components/organisms/GradeChart";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import ApperIcon from "@/components/ApperIcon";
+import React, { useEffect, useState } from "react";
 import { useCourses } from "@/hooks/useCourses";
 import { useAssignments } from "@/hooks/useAssignments";
 import { format } from "date-fns";
+import ApperIcon from "@/components/ApperIcon";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
+import GradeChart from "@/components/organisms/GradeChart";
+import Courses from "@/components/pages/Courses";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import GradeProgress from "@/components/molecules/GradeProgress";
 
 const Grades = () => {
   const { courses, loading: coursesLoading, error: coursesError } = useCourses();
@@ -19,8 +20,8 @@ const Grades = () => {
   const calculateGradeDistribution = () => {
     const distribution = { A: 0, B: 0, C: 0, D: 0, F: 0 };
     
-    courses.forEach(course => {
-      const grade = course.currentGrade || 0;
+courses.forEach(course => {
+      const grade = course.current_grade_c || 0;
       if (grade >= 90) distribution.A++;
       else if (grade >= 80) distribution.B++;
       else if (grade >= 70) distribution.C++;
@@ -34,9 +35,9 @@ const Grades = () => {
   const calculateOverallGPA = () => {
     if (courses.length === 0) return 0;
     
-    const totalCredits = courses.reduce((sum, course) => sum + course.credits, 0);
+const totalCredits = courses.reduce((sum, course) => sum + course.credits_c, 0);
     const weightedGrades = courses.reduce((sum, course) => {
-      const gradePoints = getGradePoints(course.currentGrade || 0);
+const gradePoints = getGradePoints(course.current_grade_c || 0);
       return sum + (gradePoints * course.credits);
     }, 0);
     
@@ -123,9 +124,9 @@ const Grades = () => {
             className="px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">All Courses</option>
-            {courses.map(course => (
+{courses.map(course => (
               <option key={course.Id} value={course.Id}>
-                {course.code} - {course.name}
+                {course.code_c} - {course.name_c}
               </option>
             ))}
           </select>
@@ -164,8 +165,8 @@ const Grades = () => {
                   <div>
                     <p className="text-green-100 text-sm font-medium">Average Grade</p>
                     <p className="text-3xl font-bold">
-                      {courses.length > 0 
-                        ? Math.round(courses.reduce((sum, course) => sum + (course.currentGrade || 0), 0) / courses.length)
+{courses.length > 0 
+                        ? Math.round(courses.reduce((sum, course) => sum + (course.current_grade_c || 0), 0) / courses.length)
                         : 0}%
                     </p>
                   </div>
@@ -182,7 +183,7 @@ const Grades = () => {
                   <div>
                     <p className="text-accent-100 text-sm font-medium">Total Credits</p>
                     <p className="text-3xl font-bold">
-                      {courses.reduce((sum, course) => sum + course.credits, 0)}
+{courses.reduce((sum, course) => sum + course.credits_c, 0)}
                     </p>
                   </div>
                   <div className="p-3 bg-white/20 rounded-lg">
@@ -235,23 +236,23 @@ const Grades = () => {
                 {recentGraded.length > 0 ? (
                   <div className="space-y-3">
                     {recentGraded.map((assignment) => {
-                      const course = courses.find(c => c.Id === assignment.courseId);
+const course = courses.find(c => c.Id === assignment.course_id_c);
                       return (
                         <div key={assignment.Id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                           <div className="flex-1">
                             <p className="font-medium text-gray-900 text-sm truncate">
-                              {assignment.title}
+{assignment.title_c}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {course?.code} • {format(new Date(assignment.dueDate), "MMM d")}
+{course?.code_c} • {format(new Date(assignment.due_date_c), "MMM d")}
                             </p>
                           </div>
-                          <div className="text-right">
+<div className="text-right">
                             <div className="text-lg font-bold text-primary-600">
-                              {assignment.grade}%
+                              {assignment.grade_c || 0}%
                             </div>
                             <div className="text-xs text-gray-500">
-                              {getLetterGrade(assignment.grade)}
+                              {getLetterGrade(assignment.grade_c || 0)}
                             </div>
                           </div>
                         </div>
@@ -285,13 +286,13 @@ const Grades = () => {
                     return (
                       <div key={course.Id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                         <div className="flex items-center space-x-4">
-                          <div 
+<div 
                             className="w-3 h-3 rounded-full"
-                            style={{ backgroundColor: course.color }}
+                            style={{ backgroundColor: course.color_c }}
                           />
                           <div>
-                            <h4 className="font-medium text-gray-900">{course.name}</h4>
-                            <p className="text-sm text-gray-500">{course.code} • {course.credits} credits</p>
+                            <h4 className="font-medium text-gray-900">{course.name_c}</h4>
+                            <p className="text-sm text-gray-500">{course.code_c} • {course.credits_c} credits</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-4">

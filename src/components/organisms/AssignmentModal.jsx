@@ -6,36 +6,39 @@ import { format } from "date-fns";
 import { toast } from "react-toastify";
 
 const AssignmentModal = ({ isOpen, onClose, onSave, editAssignment = null, courses = [] }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    courseId: "",
-    dueDate: "",
-    priority: "medium",
-    status: "pending",
-    grade: "",
-    notes: ""
+const [formData, setFormData] = useState({
+    title_c: "",
+    course_id_c: "",
+    due_date_c: "",
+    priority_c: "medium",
+    status_c: "pending",
+    grade_c: "",
+    notes_c: ""
   });
 
   useEffect(() => {
     if (editAssignment) {
-      setFormData({
-        ...editAssignment,
-        dueDate: format(new Date(editAssignment.dueDate), "yyyy-MM-dd"),
-        grade: editAssignment.grade || "",
-        courseId: String(editAssignment.courseId)
+setFormData({
+        title_c: editAssignment.title_c || "",
+        course_id_c: String(editAssignment.course_id_c),
+        due_date_c: format(new Date(editAssignment.due_date_c), "yyyy-MM-dd"),
+        priority_c: editAssignment.priority_c || "medium",
+        status_c: editAssignment.status_c || "pending",
+        grade_c: editAssignment.grade_c || "",
+        notes_c: editAssignment.notes_c || ""
       });
     } else {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       
-      setFormData({
-        title: "",
-        courseId: courses.length > 0 ? String(courses[0].Id) : "",
-        dueDate: format(tomorrow, "yyyy-MM-dd"),
-        priority: "medium",
-        status: "pending",
-        grade: "",
-        notes: ""
+setFormData({
+        title_c: "",
+        course_id_c: courses.length > 0 ? String(courses[0].Id) : "",
+        due_date_c: format(tomorrow, "yyyy-MM-dd"),
+        priority_c: "medium",
+        status_c: "pending",
+        grade_c: "",
+        notes_c: ""
       });
     }
   }, [editAssignment, isOpen, courses]);
@@ -48,11 +51,14 @@ const AssignmentModal = ({ isOpen, onClose, onSave, editAssignment = null, cours
       return;
     }
 
-    const assignmentData = {
-      ...formData,
-      courseId: Number(formData.courseId),
-      grade: formData.grade ? Number(formData.grade) : null,
-      dueDate: new Date(formData.dueDate).toISOString()
+const assignmentData = {
+      title_c: formData.title_c,
+      course_id_c: Number(formData.course_id_c),
+      due_date_c: new Date(formData.due_date_c).toISOString(),
+      priority_c: formData.priority_c,
+      status_c: formData.status_c,
+      grade_c: formData.grade_c ? Number(formData.grade_c) : null,
+      notes_c: formData.notes_c
     };
 
     onSave(assignmentData);
@@ -95,9 +101,9 @@ const AssignmentModal = ({ isOpen, onClose, onSave, editAssignment = null, cours
             required
           >
             <option value="">Select a course</option>
-            {courses.map(course => (
+{courses.map(course => (
               <option key={course.Id} value={course.Id}>
-                {course.code} - {course.name}
+                {course.code_c} - {course.name_c}
               </option>
             ))}
           </select>
